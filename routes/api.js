@@ -11,10 +11,13 @@
 var expect = require('chai').expect;
 var MongoClient = require('mongodb');
 var ObjectId = require('mongodb').ObjectID;
+var assert = require('assert');
 let db;
 
 const CONNECTION_STRING = process.env.DB; 
 MongoClient.connect(CONNECTION_STRING, function(err, db) {
+  assert.equal(null, err);
+  assert.ok(db != null);
   if(err){console.err(err)}
   else{
     db= db
