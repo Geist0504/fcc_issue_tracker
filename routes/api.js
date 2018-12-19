@@ -11,8 +11,15 @@
 var expect = require('chai').expect;
 var MongoClient = require('mongodb');
 var ObjectId = require('mongodb').ObjectID;
+let db;
 
-const CONNECTION_STRING = process.env.DB; //MongoClient.connect(CONNECTION_STRING, function(err, db) {});
+const CONNECTION_STRING = process.env.DB; 
+MongoClient.connect(CONNECTION_STRING, function(err, db) {
+  if(err){console.err(err)}
+  else{
+    db= db
+  }
+});
 
 module.exports = function (app) {
 
