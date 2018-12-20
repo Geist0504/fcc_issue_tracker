@@ -27,7 +27,8 @@ module.exports = function (app) {
       if (searchQuery._id) { searchQuery._id = new ObjectId(searchQuery._id)}
       if (searchQuery.open) { searchQuery.open = String(searchQuery.open) == "true" }
       MongoClient.connect(CONNECTION_STRING, function(err, db) {
-        db.collection()
+        let collection = db.collection(project)
+        collection.find(searchQuery).toArray(function(err,docs){res.json(docs)});
       })
       
     })
@@ -44,8 +45,15 @@ module.exports = function (app) {
         open: true,
         status_text: req.body.status_text || ''
       };
-      
-    })
+      if(!issue.issue_title || !issue.issue_text || !issue.created_by) {
+        res.send('missing inputs');
+      } else{
+        MongoClient.connect(CONNECTION_STRING, function(err, db) {
+          let collection = db.collection(project)
+        })
+      }  
+    }
+    
     
     .put(function (req, res){
       var project = req.params.project;
