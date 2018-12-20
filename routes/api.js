@@ -26,7 +26,9 @@ module.exports = function (app) {
       let searchQuery = req.query;
       if (searchQuery._id) { searchQuery._id = new ObjectId(searchQuery._id)}
       if (searchQuery.open) { searchQuery.open = String(searchQuery.open) == "true" }
-      MongoClient.connect(CONNECTION_STRING, function(err, db) {})
+      MongoClient.connect(CONNECTION_STRING, function(err, db) {
+        db.collection()
+      })
       
     })
     
