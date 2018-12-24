@@ -97,19 +97,29 @@ suite('Functional Tests', function() {
         chai.request(server)
          .put('/api/issues/test')
          .send({
-           _id: '5c205686eba5360474a805d5',
+           _id: '5c2056fc21f12b05b0bd0220',
           issue_title: 'New Title'
          })
         .end((err, res) =>{
-          console.log(res.body)
           assert.equal(res.status, 200)
-          assert.equal(res.body.title, 'New Title')
+          assert.equal(res.text, 'successfully updated')
           done();
         })
       });
       
       test('Multiple fields to update', function(done) {
-        
+        chai.request(server)
+         .put('/api/issues/test')
+         .send({
+           _id: '5c2056fc21f12b05b0bd0220',
+          issue_title: 'New Title',
+          issue_text: 'New Text'
+         })
+        .end((err, res) =>{
+          assert.equal(res.status, 200)
+          assert.equal(res.text, 'successfully updated')
+          done();
+        })
       });
       
     });
