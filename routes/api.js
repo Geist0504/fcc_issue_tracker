@@ -64,7 +64,6 @@ module.exports = function (app) {
       let issue = req.body._id;
       delete req.body._id;
       let updates = req.body
-      console.log(updates)
       for (let e in updates){ if(!updates[e]){ delete updates[e]}}
       if(Object.keys(updates).length === 0) {
           res.send('no updated field sent');
@@ -72,13 +71,23 @@ module.exports = function (app) {
           updates.updated_on = new Date();
           MongoClient.connect(CONNECTION_STRING, function(err, db) {
             let collection = db.collection(project)
-            collection.findAndModify({_id:new ObjectId(issue)},[['_id', 1]],{$set: updates},
+            collection.findAndModify({_id:new ObjectId(issue)},[['_id', 1]],{$set: updates},{new: true}, (err, data) => {
+              if(err){res.send('could not update ' + issue)} 
+              else {res.send('successfully updated')}
+            })
         })
       }
     })
     
     .delete(function (req, res){
       var project = req.params.project;
-      
+      let issue = req.body._id;
+      if(req.body._id){ req.body._id = new ObjectId(req.body._id)}
+      MongoClient.connect(CONNECTION_STRING, function(err, db) {
+        let collection = db.collection(project)
+        collection.deleteOne({_id: req.body._id}, (err, data) => {
+          
+        })
+      })
     })
 }
