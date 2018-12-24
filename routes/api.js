@@ -60,20 +60,19 @@ module.exports = function (app) {
     
     
     .put(function (req, res){
-      var project = req.params.project;
-      var issue = req.body._id;
+      let project = req.params.project;
+      let issue = req.body._id;
       delete req.body._id;
       let updates = req.body
-      for (let ele in updates){ if(!updates[ele]){ delete updates[ele]}}
-      if (u
-    
+      console.log(updates)
+      for (let e in updates){ if(!updates[e]){ delete updates[e]}}
       if(Object.keys(updates).length === 0) {
-          res.send('no field updates submitted');
+          res.send('no updated field sent');
         } else{
           updates.updated_on = new Date();
           MongoClient.connect(CONNECTION_STRING, function(err, db) {
             let collection = db.collection(project)
-            //collection.updateOne(issue)
+            collection.findAndModify({_id:new ObjectId(issue)},[['_id', 1]],{$set: updates},
         })
       }
     })
