@@ -64,20 +64,22 @@ module.exports = function (app) {
       var issue = req.body._id;
       delete req.body._id;
       let updates = req.body
-      console.log(typeof(updates))
+      for (let ele in updates){ if(!updates[ele]){ delete updates[ele]}}
+      if (u
     
-    if(Object.keys(updates)  || !issue.issue_text || !issue.created_by) {
-        res.send('missing inputs');
-      } else{
-        MongoClient.connect(CONNECTION_STRING, function(err, db) {
-          let collection = db.collection(project)
-          collection.updateOne(issue)
-      
+      if(Object.keys(updates).length === 0) {
+          res.send('no field updates submitted');
+        } else{
+          updates.updated_on = new Date();
+          MongoClient.connect(CONNECTION_STRING, function(err, db) {
+            let collection = db.collection(project)
+            //collection.updateOne(issue)
+        })
+      }
     })
     
     .delete(function (req, res){
       var project = req.params.project;
       
-    });
-    
-};
+    })
+}
