@@ -153,7 +153,6 @@ suite('Functional Tests', function() {
         .query({issue_title: { $eq: 'Title'}})
         .end(function(err, res){
           assert.equal(res.status, 200);
-          console.log(res.body[0])
           assert.isArray(res.body);
           assert.property(res.body[0], 'issue_title');
           assert.property(res.body[0], 'issue_text');
@@ -169,7 +168,23 @@ suite('Functional Tests', function() {
       });
       
       test('Multiple filters (test for multiple fields you know will be in the db for a return)', function(done) {
-        
+        chai.request(server)
+        .get('/api/issues/test')
+        .query({_id: '5c204358860685039f742c40'}, {issue_title: { $eq: 'Title'}} )
+        .end(function(err, res){
+          assert.equal(res.status, 200);
+          assert.isArray(res.body);
+          assert.property(res.body[0], 'issue_title');
+          assert.property(res.body[0], 'issue_text');
+          assert.property(res.body[0], 'created_on');
+          assert.property(res.body[0], 'updated_on');
+          assert.property(res.body[0], 'created_by');
+          assert.property(res.body[0], 'assigned_to');
+          assert.property(res.body[0], 'open');
+          assert.property(res.body[0], 'status_text');
+          assert.property(res.body[0], '_id');
+          done();
+        });
       });
       
     });
@@ -177,11 +192,25 @@ suite('Functional Tests', function() {
     suite('DELETE /api/issues/{project} => text', function() {
       
       test('No _id', function(done) {
-        
+        chai.request(server)
+        .delete('/api/issues/test')
+        .send({})
+        .end((err, res) => {
+          assert.equal(res.status, 200);
+          assert.equal(res.text, '_id error')
+          done()
+        })
       });
       
       test('Valid _id', function(done) {
-        
+        chai.request(server)
+        .delete('/api/issues/test')
+        .send({_id: '5c204358860685039f742c40'})
+        .end((err, res) => {
+          assert.equal(res.status, 200)
+          assert.equal(res.text, 'deleted 5c204358860685039f742c40')
+          done()
+        })
       });
       
     });
