@@ -49,16 +49,29 @@ module.exports = function (app) {
         res.send('missing inputs');
       } else{
         MongoClient.connect(CONNECTION_STRING, function(err, db) {
-          let collection = db.collection(project)
+          let collection = db.collection(project);
+          collection.insertOne(issue, (err, data) =>{
+            issue._id = data.insertedId;
+            res.json(issue)
+          })
         })
       }  
-    }
+    })
     
     
     .put(function (req, res){
       var project = req.params.project;
       var issue = req.body._id;
       delete req.body._id;
+      let updates = req.body
+      console.log(typeof(updates))
+    
+    if(Object.keys(updates)  || !issue.issue_text || !issue.created_by) {
+        res.send('missing inputs');
+      } else{
+        MongoClient.connect(CONNECTION_STRING, function(err, db) {
+          let collection = db.collection(project)
+          collection.updateOne(issue)
       
     })
     
