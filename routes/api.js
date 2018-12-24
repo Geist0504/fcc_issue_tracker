@@ -51,6 +51,7 @@ module.exports = function (app) {
         MongoClient.connect(CONNECTION_STRING, function(err, db) {
           let collection = db.collection(project);
           collection.insertOne(issue, (err, data) =>{
+            console.log(err, data)
             issue._id = data.insertedId;
             res.json(issue)
           })

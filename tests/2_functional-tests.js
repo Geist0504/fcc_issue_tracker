@@ -22,6 +22,7 @@ suite('Functional Tests', function() {
        chai.request(server)
         .post('/api/issues/test')
         .send({
+          _id: new ObjectId('5c205686eba5360474a805d5'),
           issue_title: 'Title',
           issue_text: 'text',
           created_by: 'Functional Test - Every field filled in',
@@ -30,6 +31,7 @@ suite('Functional Tests', function() {
         })
         .end(function(err, res){
           assert.equal(res.status, 200);
+         console.log(res.body)
           assert.equal(res.body.issue_title, 'Title')
           assert.equal(res.body.issue_text, 'text')
           assert.equal(res.body.created_by, 'Functional Test - Every field filled in')
@@ -98,7 +100,7 @@ suite('Functional Tests', function() {
         chai.request(server)
          .put('/api/issues/test')
          .send({
-           _id: '5c2056fc21f12b05b0bd0220',
+           _id: '5c205686eba5360474a805d5',
           issue_title: 'New Title'
          })
         .end((err, res) =>{
@@ -112,7 +114,7 @@ suite('Functional Tests', function() {
         chai.request(server)
          .put('/api/issues/test')
          .send({
-           _id: '5c2056fc21f12b05b0bd0220',
+           _id: '5c205686eba5360474a805d5',
           issue_title: 'New Title',
           issue_text: 'New Text'
          })
@@ -170,7 +172,7 @@ suite('Functional Tests', function() {
       test('Multiple filters (test for multiple fields you know will be in the db for a return)', function(done) {
         chai.request(server)
         .get('/api/issues/test')
-        .query({_id: '5c204358860685039f742c40'}, {issue_title: { $eq: 'Title'}} )
+        .query({_id: '5c205686eba5360474a805d5'}, {issue_title: { $eq: 'New Title'}} )
         .end(function(err, res){
           assert.equal(res.status, 200);
           assert.isArray(res.body);
@@ -205,10 +207,10 @@ suite('Functional Tests', function() {
       test('Valid _id', function(done) {
         chai.request(server)
         .delete('/api/issues/test')
-        .send({_id: '5c204358860685039f742c40'})
+        .send({_id: '5c205686eba5360474a805d5'})
         .end((err, res) => {
           assert.equal(res.status, 200)
-          assert.equal(res.text, 'deleted 5c204358860685039f742c40')
+          assert.equal(res.text, 'deleted 5c205686eba5360474a805d5')
           done()
         })
       });
