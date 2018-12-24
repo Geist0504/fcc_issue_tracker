@@ -35,18 +35,30 @@ suite('Functional Tests', function() {
           assert.equal(res.body.assigned_to, 'Chai and Mocha')
           assert.equal(res.body.status_text, 'In QA')
           assert.equal(res.body.open, true)
-          assert.equal(res.body.created_on, new Date())
-          assert.equal(res.body.updated_on, new Date())
-         
-
-          //fill me in too!
-          
+          assert.equal(new Date(res.body.created_on).setHours(0,0,0,0), new Date().setHours(0,0,0,0))
+          assert.equal(new Date(res.body.updated_on).setHours(0,0,0,0), new Date().setHours(0,0,0,0))
           done();
         });
       });
       
       test('Required fields filled in', function(done) {
-        
+        chai.request(server)
+         .post('/api/issues/test')
+         .send({
+          issue_title: 'Title',
+          issue_text: 'text',
+          created_by: 'Functional Test - Every field filled in'
+        })
+        .end(function(err, res){
+          assert.equal(res.status, 200);
+          assert.equal(res.body.issue_title, 'Title')
+          assert.equal(res.body.issue_text, 'text')
+          assert.equal(res.body.created_by, 'Functional Test - Every field filled in')
+          assert.equal(res.body.open, true)
+          assert.equal(new Date(res.body.created_on).setHours(0,0,0,0), new Date().setHours(0,0,0,0))
+          assert.equal(new Date(res.body.updated_on).setHours(0,0,0,0), new Date().setHours(0,0,0,0))
+          done();
+        });
       });
       
       test('Missing required fields', function(done) {
