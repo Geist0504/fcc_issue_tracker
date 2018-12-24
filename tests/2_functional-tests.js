@@ -62,6 +62,17 @@ suite('Functional Tests', function() {
       });
       
       test('Missing required fields', function(done) {
+        chai.request(server)
+         .post('/api/issues/test')
+         .send({
+          issue_title: 'Title',
+          issue_text: 'text'
+        })
+        .end((err, res) => {
+          assert.equal(res.status, 200);
+          assert.equal(res.text, 'missing inputs');
+          done();
+        })
         
       });
       
@@ -70,11 +81,31 @@ suite('Functional Tests', function() {
     suite('PUT /api/issues/{project} => text', function() {
       
       test('No body', function(done) {
-        
+        chai.request(server)
+         .put('/api/issues/test')
+         .send({
+           _id: '65423165dfjklherfgfg',
+         })
+        .end((err, res) =>{
+          assert.equal(res.status, 200)
+          assert.equal(res.text, 'no updated field sent')
+          done();
+        })
       });
       
       test('One field to update', function(done) {
-        
+        chai.request(server)
+         .put('/api/issues/test')
+         .send({
+           _id: '5c205686eba5360474a805d5',
+          issue_title: 'New Title'
+         })
+        .end((err, res) =>{
+          console.log(res.body)
+          assert.equal(res.status, 200)
+          assert.equal(res.body.title, 'New Title')
+          done();
+        })
       });
       
       test('Multiple fields to update', function(done) {
